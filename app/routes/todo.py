@@ -40,3 +40,15 @@ def get_todos(
         query = query.order_by(getattr(models.Todo, sort))
 
     return query.offset(offset).limit(limit).all()
+
+# -------- GET ONE -------- #
+@router.get("/todos/{todo_id}", response_model=schemas.TodoOut)
+def get_todo(
+    todo_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    todo = db.query(models.Todo).filter_by(id=todo_id, owner_id=current_user.id).first()
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return todo
