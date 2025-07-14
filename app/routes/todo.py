@@ -20,3 +20,23 @@ def create_todo(
     db.commit()
     db.refresh(new_todo)
     return new_todo
+
+# -------- LIST -------- #
+@router.get("/todos/", response_model=List[schemas.TodoOut])
+def get_todos(
+    status: Optional[str] = Query(None),
+    sort: Optional[str] = Query("id"),
+    limit: int = Query(10, ge=1),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    query = db.query(models.Todo).filter(models.Todo.owner_id == current_user.id)
+
+    if status:
+        query = query.filter(models.Todo.status == status)
+
+    if sort in ["id", "title", "status"]:
+        query = query.order_by(getattr(models.Todo, sort))
+
+    return query.offset(offset).limit(limit).all()
