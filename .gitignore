@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+*.egg
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+pip-wheel-metadata/
+*.log
+
+# SQLite DB
+*.db
+*.sqlite3
+
+# Environments
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.cache
