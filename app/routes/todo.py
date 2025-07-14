@@ -71,3 +71,18 @@ def update_todo(
     db.commit()
     db.refresh(todo)
     return todo
+
+# -------- DELETE -------- #
+@router.delete("/todos/{todo_id}")
+def delete_todo(
+    todo_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    todo = db.query(models.Todo).filter_by(id=todo_id, owner_id=current_user.id).first()
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+
+    db.delete(todo)
+    db.commit()
+    return {"detail": "Todo deleted"}
