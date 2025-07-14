@@ -181,24 +181,3 @@ Create a collection like this:
 You can **set access_token and refresh_token** as Postman environment variables to use in all requests automatically.
 
 ---
-
-## 💡 Tips for Testing
-
-1. **Environment Variables**: Set up Postman environment variables for `base_url`, `access_token`, and `refresh_token` to make testing easier.
-
-2. **Test Scripts**: Add test scripts to automatically save tokens from login responses:
-   ```javascript
-   // In login request's "Tests" tab
-   pm.test("Login successful", function () {
-       pm.response.to.have.status(200);
-       var jsonData = pm.response.json();
-       pm.environment.set("access_token", jsonData.access_token);
-       pm.environment.set("refresh_token", jsonData.refresh_token);
-   });
-   ```
-
-3. **Pre-request Scripts**: Use pre-request scripts to automatically refresh tokens when they expire.
-
-4. **Test Assertions**: Add assertions to verify response status codes and data structure in each request.
-
-5. **Error Testing**: Test error cases like invalid credentials, expired tokens, and unauthorized access to ensure proper error handling.
