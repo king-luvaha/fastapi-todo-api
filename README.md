@@ -82,12 +82,17 @@ uvicorn app.main:app --reload
 Create a `.env` file in the root directory:
 
 ```ini
-SECRET_KEY=your-secret-key
+# JWT secrets
+SECRET_KEY=supersecretaccesskey
+REFRESH_SECRET_KEY=supersecretrefreshkey
 ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-REFRESH_SECRET_KEY=your-refresh-secret-key
+# Token expiry
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# Database URL
+DATABASE_URL=sqlite:///./todo.db
 ```
 
 ---
