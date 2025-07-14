@@ -66,3 +66,16 @@ def refresh_token(req: schemas.RefreshTokenRequest, db: Session = Depends(get_db
         "refresh_token": new_refresh_token,
         "token_type": "bearer"
     }
+
+# --------- Logout ----------#
+@router.post("/logout")
+def logout(req: schemas.RefreshTokenRequest, db: Session = Depends(get_db)):
+    token_entry = db.query(models.RefreshToken).filter_by(token=req.refresh_token).first()
+
+    if not token_entry or token_entry.is_revoked:
+        raise HTTPException(status_code=401, detail="Token already invalid or not found")
+
+    token_entry.is_revoked = True
+    db.commit()
+
+    return {"detail": "Logged out successfully"}
