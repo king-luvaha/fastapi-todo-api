@@ -176,7 +176,7 @@ todo_api/
 
 ## 📄 License
 
-MIT License. Feel free to fork and contribute!
+[MIT License](LICENSE). Feel free to fork and contribute!
 
 ---
 
