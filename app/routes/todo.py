@@ -52,3 +52,22 @@ def get_todo(
     if not todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     return todo
+
+# -------- UPDATE -------- #
+@router.put("/todos/{todo_id}", response_model=schemas.TodoOut)
+def update_todo(
+    todo_id: int,
+    updated_data: schemas.TodoUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    todo = db.query(models.Todo).filter_by(id=todo_id, owner_id=current_user.id).first()
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+
+    for key, value in updated_data.dict(exclude_unset=True).items():
+        setattr(todo, key, value)
+
+    db.commit()
+    db.refresh(todo)
+    return todo
