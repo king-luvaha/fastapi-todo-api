@@ -48,3 +48,21 @@ def login(user_login: schemas.UserLogin, db: Session = Depends(get_db)):
         "refresh_token": refresh_token,
         "token_type": "bearer"
     }
+
+# --------- Refresh Token ----------#
+@router.post("/refresh-token", response_model=schemas.Token)
+def refresh_token(req: schemas.RefreshTokenRequest, db: Session = Depends(get_db)):
+    username = auth.verify_refresh_token_db(req.refresh_token, db)
+    user = db.query(models.User).filter_by(username=username).first()
+
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+
+    access_token = auth.create_access_token(data={"sub": username})
+    new_refresh_token = auth.create_refresh_token_db(user=user, db=db)
+
+    return {
+        "access_token": access_token,
+        "refresh_token": new_refresh_token,
+        "token_type": "bearer"
+    }
